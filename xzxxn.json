@@ -795,6 +795,35 @@
         "https://raw.githubusercontent.com/xzxxn777/Surge/main/Script/AiLuQiao/AiLuQiao.png",
         "https://raw.githubusercontent.com/xzxxn777/Surge/main/Script/AiLuQiao/AiLuQiao.png"
       ]
+    },
+    {
+      "id": "ZSJD",
+      "name": "掌上金东",
+      "keys": [
+        "ZSJD"
+      ],
+      "scripts": [
+        {
+          "name": "掌上金东-手动执行",
+          "script": "https://raw.githubusercontent.com/xzxxn777/Surge/main/Script/ZSJD/ZSJD.js"
+        }
+      ],
+      "settings": [
+        {
+          "id": "ZSJD",
+          "name": "accountId&token",
+          "val": "",
+          "type": "text",
+          "desc": "格式:accountId&token accountId&token"
+        }
+      ],
+      "author": "@xzxxn777",
+      "repo": "https://github.com/xzxxn777/Surge",
+      "script": "https://raw.githubusercontent.com/xzxxn777/Surge/main/Script/ZSJD/ZSJD.js",
+      "icons": [
+        "https://raw.githubusercontent.com/xzxxn777/Surge/main/Script/ZSJD/ZSJD.png",
+        "https://raw.githubusercontent.com/xzxxn777/Surge/main/Script/ZSJD/ZSJD.png"
+      ]
     }
   ]
 }
