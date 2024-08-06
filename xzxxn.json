@@ -525,6 +525,10 @@
             {
               "key": "RongPanAn",
               "label": "融磐安"
+            },
+            {
+              "key": "LanJingLing",
+              "label": "兰精灵"
             }
           ],
           "desc": "选择app"
@@ -856,6 +860,35 @@
       "icons": [
         "https://raw.githubusercontent.com/xzxxn777/Surge/main/Script/RongPanAn/RongPanAn.png",
         "https://raw.githubusercontent.com/xzxxn777/Surge/main/Script/RongPanAn/RongPanAn.png"
+      ]
+    },
+    {
+      "id": "LanJingLing",
+      "name": "兰精灵",
+      "keys": [
+        "LanJingLing"
+      ],
+      "scripts": [
+        {
+          "name": "兰精灵-手动执行",
+          "script": "https://raw.githubusercontent.com/xzxxn777/Surge/main/Script/LanJingLing/LanJingLing.js"
+        }
+      ],
+      "settings": [
+        {
+          "id": "LanJingLing",
+          "name": "账号密码姓名支付宝账号",
+          "val": "",
+          "type": "text",
+          "desc": "格式:账号1&密码1&支付宝姓名1&支付宝账号1 账号2&密码2&支付宝姓名2&支付宝账号2"
+        }
+      ],
+      "author": "@xzxxn777",
+      "repo": "https://github.com/xzxxn777/Surge",
+      "script": "https://raw.githubusercontent.com/xzxxn777/Surge/main/Script/LanJingLing/LanJingLing.js",
+      "icons": [
+        "https://raw.githubusercontent.com/xzxxn777/Surge/main/Script/LanJingLing/LanJingLing.png",
+        "https://raw.githubusercontent.com/xzxxn777/Surge/main/Script/LanJingLing/LanJingLing.png"
       ]
     }
   ]
