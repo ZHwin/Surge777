@@ -5,6 +5,7 @@
 const $ = new Env('富士instax玩拍由我俱乐部');
 let INSTAX = ($.isNode() ? JSON.parse(process.env.INSTAX) : $.getjson("INSTAX")) || [];
 let comments = ['冲呀','不错','赞','顶']
+let lotteryId = 44
 let token=''
 let notice = ''
 !(async () => {
@@ -35,10 +36,10 @@ async function main() {
         }
         console.log("————————————")
         console.log("幸运大转盘")
-        let chance = await commonGet(`/user/${userId}/draw-activities/42/chance`);
+        let chance = await commonGet(`/user/${userId}/draw-activities/${lotteryId}/chance`);
         console.log(`拥有${chance.data}次抽奖`)
         for (let i = 0; i < chance.data; i++) {
-            let draw = await commonPost(`/user/${userId}/draw-activities/42/draw`);
+            let draw = await commonPost(`/user/${userId}/draw-activities/${lotteryId}/draw`);
             console.log(`抽奖获得：${draw.data.record.desc}`)
             if (draw.data.record.expend_type == 'entity') {
                 await sendMsg(`用户：${id}\n抽奖获得: ${draw.data.record.desc}`);
