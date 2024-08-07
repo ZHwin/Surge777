@@ -68,6 +68,7 @@
 | 爱路桥 | [AiLuQiao](https://github.com/xzxxn777/Surge/blob/main/Script/AiLuQiao/AiLuQiao.js) | ✅(2024/08/02) | ✅️ |
 | 掌上金东 | [ZSJD](https://github.com/xzxxn777/Surge/blob/main/Script/ZSJD/ZSJD.js) | ✅(2024/08/04) | ✅️ |
 | 融磐安 | [RongPanAn](https://github.com/xzxxn777/Surge/blob/main/Script/RongPanAn/RongPanAn.js) | ✅(2024/08/05) | ✅️ |
+| 兰精灵 | [LanJingLing](https://github.com/xzxxn777/Surge/blob/main/Script/LanJingLing/LanJingLing.js) | ✅(2024/08/06) | ✅️ |
 
 ------
 ### [一键订阅boxjs](http://boxjs.com/#/sub/add/https://raw.githubusercontent.com/xzxxn777/Surge/main/xzxxn.json)
