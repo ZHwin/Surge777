@@ -684,8 +684,7 @@
       "id": "YongPai",
       "name": "甬派",
       "keys": [
-        "YongPai",
-        "YongPaiDeviceId"
+        "YongPai"
       ],
       "scripts": [
         {
@@ -696,17 +695,10 @@
       "settings": [
         {
           "id": "YongPai",
-          "name": "账号密码姓名支付宝账号",
+          "name": "账号密码姓名支付宝账号设备id",
           "val": "",
           "type": "text",
-          "desc": "格式:账号1&密码1&支付宝姓名1&支付宝账号1 账号2&密码2&支付宝姓名2&支付宝账号2"
-        },
-        {
-          "id": "YongPaiDeviceId",
-          "name": "设备id",
-          "val": "",
-          "type": "text",
-          "desc": "抓包填写"
+          "desc": "格式:账号1&密码1&支付宝姓名1&支付宝账号1&设备id1 账号2&密码2&支付宝姓名2&支付宝账号2&设备id2"
         }
       ],
       "author": "@xzxxn777",

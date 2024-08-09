@@ -2,6 +2,7 @@
  * cron "0 9,19 * * *" YueCheng.js
  * export YueCheng="账号1&密码1&支付宝姓名1&支付宝账号1 账号2&密码2&支付宝姓名2&支付宝账号2"
  * export OCR_SERVER="ocr服务"
+ * export YueCheng_Ua="ua"//95337.activity-42.m.duiba.com.cn
  */
 const $ = new Env('今日越城')
 const notify = $.isNode() ? require('../sendNotify') : '';
