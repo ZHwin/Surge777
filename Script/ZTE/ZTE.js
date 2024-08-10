@@ -57,16 +57,16 @@ async function main() {
             success = true
         }
         tokenArr.push({phone: phone, token: token})
-        let create = await commonGet('st_id=14&openid=1&tmplIds=%5B%5D&method=shareTeaming.create.team&format=json&v=v1');
-        if (create.errorcode == 0) {
-            console.log(`创建队伍成功：${create.data.team_id}`)
-            teamIdArr.push(create.data.team_id)
-        } else {
-            console.log(create.msg)
-            let getTeamId = await commonGet(`st_id=14&method=shareTeaming.get.teamId&format=json&v=v1`);
-            console.log(`当前创建的队伍：${getTeamId.data.team_id}`)
-            teamIdArr.push(getTeamId.data.team_id)
-        }
+        // let create = await commonGet('st_id=14&openid=1&tmplIds=%5B%5D&method=shareTeaming.create.team&format=json&v=v1');
+        // if (create.errorcode == 0) {
+        //     console.log(`创建队伍成功：${create.data.team_id}`)
+        //     teamIdArr.push(create.data.team_id)
+        // } else {
+        //     console.log(create.msg)
+        //     let getTeamId = await commonGet(`st_id=14&method=shareTeaming.get.teamId&format=json&v=v1`);
+        //     console.log(`当前创建的队伍：${getTeamId.data.team_id}`)
+        //     teamIdArr.push(getTeamId.data.team_id)
+        // }
     }
     for (const item of tokenArr) {
         phone = item.phone;
@@ -137,21 +137,21 @@ async function main() {
         // } else {
         //     console.log(prize.data.msg)
         // }
-        console.log("————————————")
-        console.log("组队")
-        for (const teamId of teamIdArr) {
-            let teamInfo = await commonGet(`team_id=${teamId}&method=get.shareTeaming.teamInfo&format=json&v=v1`);
-            if (teamInfo.data.members_num < 4) {
-                let join = await commonGet(`st_id=14&openid=1&team_id=${teamId}&tmplIds=st_id=14&openid=oCuYT0RwCL6WFFnHeNvuFumaJd_0&tmplIds=%5B%5D&method=shareTeaming.create.team&format=json&v=v1&method=shareTeaming.join.team&format=json&v=v1`);
-                if (join.errorcode == 0) {
-                    console.log(`加入成功`)
-                } else {
-                    console.log(join.msg)
-                }
-            } else {
-                console.log(`队伍已满`)
-            }
-        }
+        // console.log("————————————")
+        // console.log("组队")
+        // for (const teamId of teamIdArr) {
+        //     let teamInfo = await commonGet(`team_id=${teamId}&method=get.shareTeaming.teamInfo&format=json&v=v1`);
+        //     if (teamInfo.data.members_num < 4) {
+        //         let join = await commonGet(`st_id=14&openid=1&team_id=${teamId}&tmplIds=st_id=14&openid=oCuYT0RwCL6WFFnHeNvuFumaJd_0&tmplIds=%5B%5D&method=shareTeaming.create.team&format=json&v=v1&method=shareTeaming.join.team&format=json&v=v1`);
+        //         if (join.errorcode == 0) {
+        //             console.log(`加入成功`)
+        //         } else {
+        //             console.log(join.msg)
+        //         }
+        //     } else {
+        //         console.log(`队伍已满`)
+        //     }
+        // }
         console.log("————————————")
         console.log("积分查询")
         let info = await commonGet(`method=member.index&format=json&v=v1`);
