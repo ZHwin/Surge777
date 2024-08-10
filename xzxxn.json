@@ -915,6 +915,35 @@
         "https://raw.githubusercontent.com/xzxxn777/Surge/main/Script/AiHaiYan/AiHaiYan.png",
         "https://raw.githubusercontent.com/xzxxn777/Surge/main/Script/AiHaiYan/AiHaiYan.png"
       ]
+    },
+    {
+      "id": "JiaShan",
+      "name": "in嘉善",
+      "keys": [
+        "JiaShan"
+      ],
+      "scripts": [
+        {
+          "name": "in嘉善-手动执行",
+          "script": "https://raw.githubusercontent.com/xzxxn777/Surge/main/Script/JiaShan/JiaShan.js"
+        }
+      ],
+      "settings": [
+        {
+          "id": "JiaShan",
+          "name": "账号密码",
+          "val": "",
+          "type": "text",
+          "desc": "格式:账号1&密码1 账号2&密码2"
+        }
+      ],
+      "author": "@xzxxn777",
+      "repo": "https://github.com/xzxxn777/Surge",
+      "script": "https://raw.githubusercontent.com/xzxxn777/Surge/main/Script/JiaShan/JiaShan.js",
+      "icons": [
+        "https://raw.githubusercontent.com/xzxxn777/Surge/main/Script/JiaShan/JiaShan.png",
+        "https://raw.githubusercontent.com/xzxxn777/Surge/main/Script/JiaShan/JiaShan.png"
+      ]
     }
   ]
 }
