@@ -533,6 +533,10 @@
             {
               "key": "AiHaiYan",
               "label": "爱海盐"
+            },
+            {
+              "key": "QingJiao",
+              "label": "青椒"
             }
           ],
           "desc": "选择app"
@@ -943,6 +947,35 @@
       "icons": [
         "https://raw.githubusercontent.com/xzxxn777/Surge/main/Script/JiaShan/JiaShan.png",
         "https://raw.githubusercontent.com/xzxxn777/Surge/main/Script/JiaShan/JiaShan.png"
+      ]
+    },
+    {
+      "id": "QingJiao",
+      "name": "青椒",
+      "keys": [
+        "QingJiao"
+      ],
+      "scripts": [
+        {
+          "name": "青椒-手动执行",
+          "script": "https://raw.githubusercontent.com/xzxxn777/Surge/main/Script/QingJiao/QingJiao.js"
+        }
+      ],
+      "settings": [
+        {
+          "id": "QingJiao",
+          "name": "账号密码",
+          "val": "",
+          "type": "text",
+          "desc": "格式:账号1&密码1 账号2&密码2"
+        }
+      ],
+      "author": "@xzxxn777",
+      "repo": "https://github.com/xzxxn777/Surge",
+      "script": "https://raw.githubusercontent.com/xzxxn777/Surge/main/Script/QingJiao/QingJiao.js",
+      "icons": [
+        "https://raw.githubusercontent.com/xzxxn777/Surge/main/Script/QingJiao/QingJiao.png",
+        "https://raw.githubusercontent.com/xzxxn777/Surge/main/Script/QingJiao/QingJiao.png"
       ]
     }
   ]
