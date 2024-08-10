@@ -71,6 +71,7 @@
 | 兰精灵 | [LanJingLing](https://github.com/xzxxn777/Surge/blob/main/Script/LanJingLing/LanJingLing.js) | ✅(2024/08/06) | ✅️ |
 | 爱海盐 | [AiHaiYan](https://github.com/xzxxn777/Surge/blob/main/Script/AiHaiYan/AiHaiYan.js) | ✅(2024/08/09) | ✅️ |
 | in嘉善 | [JiaShan](https://github.com/xzxxn777/Surge/blob/main/Script/JiaShan/JiaShan.js) | ✅(2024/08/10) | ✅️ |
+| 青椒 | [QingJiao](https://github.com/xzxxn777/Surge/blob/main/Script/QingJiao/QingJiao.js) | ✅(2024/08/10) | ✅️ |
 
 ------
 ### [一键订阅boxjs](http://boxjs.com/#/sub/add/https://raw.githubusercontent.com/xzxxn777/Surge/main/xzxxn.json)
