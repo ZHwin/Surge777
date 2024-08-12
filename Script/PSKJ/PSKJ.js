@@ -1,5 +1,5 @@
 /**
- * cron "33 2,20 * * *" PSKJ.js
+ * cron "33 2,12,20 * * *" PSKJ.js
  * export PSKJ='[{"id": "1", "token": "1"},{"id": "2", "token": "2"}]'
  */
 const $ = new Env('攀升科技+')

@@ -1,5 +1,5 @@
 /**
- * cron "43 2,20 * * *" HaiTian.js
+ * cron "43 2,11,20 * * *" HaiTian.js
  * export HaiTian='[{"id":"1","uuid":"1","token":"1","refreshToken":"1"},{"id":"2","uuid":"2","token":"2","refreshToken":"2"}]'
  */
 const $ = new Env('海天美味馆')
