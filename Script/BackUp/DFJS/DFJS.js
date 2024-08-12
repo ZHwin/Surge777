@@ -1,10 +1,10 @@
 /**
- * cron "1 0,22 * * *" MengNiuNutritionist.js
- * export MengNiuNutritionist='[{"id": "1", "token": "1", "encryptionkey": "1", "openId": "1", "storeId": "1", "totalId": "1"},{"id": "2", "token": "2", "encryptionkey": "2", "openId": "2", "storeId": "2", "totalId": "2"}]'
+ * cron "43 11,21 * * *" DFJS.js
+ * export DFJS='[{"id":"1","token":"1"},{"id":"2","token":"2"}]'
  */
-const $ = new Env('蒙牛营养生活家')
-const MengNiuNutritionist = ($.isNode() ? JSON.parse(process.env.MengNiuNutritionist) : $.getjson("MengNiuNutritionist")) || [];
-let token,encryptionkey = ''
+const $ = new Env('东方棘市')
+const DFJS = ($.isNode() ? JSON.parse(process.env.DFJS) : $.getjson("DFJS")) || [];
+let token = ''
 let notice = ''
 !(async () => {
     if (typeof $request != "undefined") {
@@ -16,27 +16,40 @@ let notice = ''
 
 async function main() {
     console.log('作者：@xzxxn777\n频道：https://t.me/xzxxn777\n群组：https://t.me/xzxxn7777\n自用机场推荐：https://xn--diqv0fut7b.com\n')
-    for (const item of MengNiuNutritionist) {
+    for (const item of DFJS) {
         id = item.id;
         token = item.token;
-        encryptionkey = item.encryptionkey;
-        openId = item.openId;
-        storeId = item.storeId;
-        totalId = item.totalId;
         console.log(`用户：${id}开始任务`)
         console.log('开始签到')
-        let signInfo = await commonPost('/get_sign_in_by_id',{"activeId":totalId})
-        let sign = await commonPost('/add_sign_in_customer',{"mobile":id,"storeId":storeId,"actionName":"营养值赚取","time":getCurrentTime(),"proteinNumber":signInfo.proteinNumber,"openId":openId,"totalId":totalId,"brand":"GLOBAL"})
-        if (sign.res) {
-            console.log(`签到成功，获得：${sign.gift}营养值`)
-        } else {
-            console.log(sign.msg)
+        let sign = await commonGet('/user_sign/sign')
+        console.log(sign.msg)
+        if (sign.code == 1) {
+            console.log(`能量释放：${sign.data.rewards_info.energy_release}`)
+        }
+        console.log('分享')
+        let share = await commonPost('/quest.quest/issueRewards',{"quest_id":4})
+        console.log(share.msg)
+        if (share.data.result) {
+            console.log(share.data.result.msg)
+        }
+        console.log('关注公众号')
+        let follow = await commonPost('/quest.quest/issueRewards',{"quest_id":2})
+        console.log(follow.msg)
+        if (follow.data.result) {
+            console.log(follow.data.result.msg)
         }
         console.log("————————————")
-        console.log("查询营养值")
-        let selectUserNutritiveValue = await commonGet(id)
-        console.log(`拥有营养值：${selectUserNutritiveValue.data.pointsBalance}\n`)
-        notice += `用户：${id} 拥有营养值: ${selectUserNutritiveValue.data.pointsBalance}\n`
+        console.log("查询积分")
+        let info = await commonGet('/user/info')
+        let amount = info.data.remaining_fruits;
+        if (amount >= 0.3) {
+            console.log('提现')
+            let user_withdraw = await commonPost('/user.user_withdraw/apply',{"pay_gateway": "wechat", "fruit_withdraw_amount": amount.toString()})
+            console.log(user_withdraw.msg)
+        }
+        info = await commonGet('/user/info')
+        console.log(`拥有能量：${info.data.remaining_energies} 果子：${info.data.remaining_fruits}\n`)
+        notice += `用户：${id} 拥有能量：${info.data.remaining_energies} 果子：${info.data.remaining_fruits}\n`
     }
     if (notice) {
         await sendMsg(notice);
@@ -44,51 +57,48 @@ async function main() {
 }
 
 async function getCookie() {
-    const token = $request.headers["isv-token"] || $request.headers["Isv-Token"];
-    const encryptionkey = $request.headers["encryptionkey"] || $request.headers["encryptionKey"];
-    if (!token || !encryptionkey) {
+    const token = $request.headers["token"] || $request.headers["Token"];
+    if (!token) {
         return
     }
-    const body = $.toObj($request.body);
-    const id = body.mobile;
-    const openId = body.openId;
-    const storeId = body.storeId;
-    const totalId = body.totalId;
-    const newData = {"id": id, "token": token, "encryptionkey": encryptionkey, "openId": openId, "storeId": storeId, "totalId": totalId};
-    const index = MengNiuNutritionist.findIndex(e => e.id == newData.id);
+    const body = $.toObj($response.body);
+    if (!body || !body.data || !body.data.mobile) {
+        return
+    }
+    const id = body.data.mobile;
+    const newData = {"id": id, "token": token};
+    const index = DFJS.findIndex(e => e.id == newData.id);
     if (index !== -1) {
-        if (MengNiuNutritionist[index].token == newData.token && MengNiuNutritionist[index].encryptionkey == newData.encryptionkey) {
+        if (DFJS[index].token == newData.token) {
             return
         } else {
-            MengNiuNutritionist[index] = newData;
+            DFJS[index] = newData;
             console.log(newData.token)
             $.msg($.name, `🎉用户${newData.id}更新token成功!`, ``);
         }
     } else {
-        MengNiuNutritionist.push(newData)
+        DFJS.push(newData)
         console.log(newData.token)
         $.msg($.name, `🎉新增用户${newData.id}成功!`, ``);
     }
-    $.setjson(MengNiuNutritionist, "MengNiuNutritionist");
+    $.setjson(DFJS, "DFJS");
 }
 
 async function commonPost(url,body) {
     return new Promise(resolve => {
         const options = {
-            url: `https://mp-isv.youzanyun.com/activity${url}`,
+            url: `https://ys.shajixueyuan.com/api${url}`,
             headers : {
-                'encryptionkey': encryptionkey,
-                'accept': 'application/json',
-                'isv-token': token,
+                'version': '1.0.13.2',
                 'content-type': 'application/json',
                 'xweb_xhr': '1',
-                'isv': 'mengniuxitongdatong.isv.youzan.com',
                 'token': token,
                 'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 MicroMessenger/6.8.0(0x16080000) NetType/WIFI MiniProgramEnv/Mac MacWechat/WMPF MacWechat/3.8.7(0x13080712) XWEB/1191',
+                'accept': 'application/json',
                 'Sec-Fetch-Site': 'cross-site',
                 'Sec-Fetch-Mode': 'cors',
                 'Sec-Fetch-Dest': 'empty',
-                'Referer': `https://servicewechat.com/wx1342c59a70c7a94f/253/page-frame.html`,
+                'Referer': `https://servicewechat.com/wxebdf2c44a2a714c2/70/page-frame.html`,
                 'Accept-Encoding': 'gzip, deflate, br',
                 'Accept-Language': 'zh-CN,zh;q=0.9',
             },
@@ -115,20 +125,18 @@ async function commonPost(url,body) {
 async function commonGet(url) {
     return new Promise(resolve => {
         const options = {
-            url: `https://mp-isv.youzanyun.com//nutritiveValue/selectUserNutritiveValue?mobile=${url}`,
+            url: `https://ys.shajixueyuan.com/api${url}`,
             headers : {
-                'encryptionkey': encryptionkey,
-                'accept': 'application/json',
-                'isv-token': token,
+                'version': '1.0.13.2',
                 'content-type': 'application/json',
                 'xweb_xhr': '1',
-                'isv': 'mengniuxitongdatong.isv.youzan.com',
                 'token': token,
                 'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 MicroMessenger/6.8.0(0x16080000) NetType/WIFI MiniProgramEnv/Mac MacWechat/WMPF MacWechat/3.8.7(0x13080712) XWEB/1191',
+                'accept': 'application/json',
                 'Sec-Fetch-Site': 'cross-site',
                 'Sec-Fetch-Mode': 'cors',
                 'Sec-Fetch-Dest': 'empty',
-                'Referer': `https://servicewechat.com/wx1342c59a70c7a94f/253/page-frame.html`,
+                'Referer': `https://servicewechat.com/wxebdf2c44a2a714c2/70/page-frame.html`,
                 'Accept-Encoding': 'gzip, deflate, br',
                 'Accept-Language': 'zh-CN,zh;q=0.9',
             }
@@ -151,24 +159,13 @@ async function commonGet(url) {
     })
 }
 
-function getCurrentTime() {
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, '0');
-    const day = String(now.getDate()).padStart(2, '0');
-    const hours = String(now.getHours()).padStart(2, '0');
-    const minutes = String(now.getMinutes()).padStart(2, '0');
-    const seconds = String(now.getSeconds()).padStart(2, '0');
-    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-}
-
 async function sendMsg(message) {
     if ($.isNode()) {
         let notify = ''
         try {
             notify = require('./sendNotify');
         } catch (e) {
-            notify = require("../sendNotify");
+            notify = require("../../sendNotify");
         }
         await notify.sendNotify($.name, message);
     } else {

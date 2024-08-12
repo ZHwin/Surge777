@@ -1,10 +1,13 @@
 /**
- * cron "43 11,21 * * *" DFJS.js
- * export DFJS='[{"id":"1","token":"1"},{"id":"2","token":"2"}]'
+ * cron "50 0,10 * * *" KuGua.js
+ * export KuGua='[{"id": "1", "openId": "1", "refreshToken": "1"},{"id": "2", "openId": "2", "refreshToken": "2"}]'
  */
-const $ = new Env('东方棘市')
-const DFJS = ($.isNode() ? JSON.parse(process.env.DFJS) : $.getjson("DFJS")) || [];
+const $ = new Env('酷瓜好物')
+const KuGua = ($.isNode() ? JSON.parse(process.env.KuGua) : $.getjson("KuGua")) || [];
 let token = ''
+let refreshToken = ''
+let appId = 'wx1f9fc8e79fcbce16'
+let openId = ''
 let notice = ''
 !(async () => {
     if (typeof $request != "undefined") {
@@ -16,40 +19,51 @@ let notice = ''
 
 async function main() {
     console.log('作者：@xzxxn777\n频道：https://t.me/xzxxn777\n群组：https://t.me/xzxxn7777\n自用机场推荐：https://xn--diqv0fut7b.com\n')
-    for (const item of DFJS) {
+    for (const item of KuGua) {
         id = item.id;
-        token = item.token;
+        refreshToken = item.refreshToken;
+        openId = item.openId;
         console.log(`用户：${id}开始任务`)
+        console.log('刷新token')
+        let refresh = await commonPost('/refreshToken', {"refresh_token":refreshToken})
+        token = refresh.data.token;
+        console.log(token)
         console.log('开始签到')
-        let sign = await commonGet('/user_sign/sign')
-        console.log(sign.msg)
-        if (sign.code == 1) {
-            console.log(`能量释放：${sign.data.rewards_info.energy_release}`)
-        }
-        console.log('分享')
-        let share = await commonPost('/quest.quest/issueRewards',{"quest_id":4})
-        console.log(share.msg)
-        if (share.data.result) {
-            console.log(share.data.result.msg)
-        }
-        console.log('关注公众号')
-        let follow = await commonPost('/quest.quest/issueRewards',{"quest_id":2})
-        console.log(follow.msg)
-        if (follow.data.result) {
-            console.log(follow.data.result.msg)
+        let sign = await commonPost('/inflatedv3/popUpRedEnvelopes', {"type":1,"invite_id":"","code_ticket":"","count":"","token":token,"appid":appId,"openid":openId})
+        if (sign.data.dialog) {
+            console.log(`签到成功，获得现金：${sign.data.amount}`)
+            let dialogId = sign.data.dialogId;
+            let receiveRedEnvelopes = await commonPost('/inflatedv3/receiveRedEnvelopes', {"dialogId":dialogId,"token":token,"appid":appId,"openid":openId})
+            console.log(receiveRedEnvelopes.codemsg)
+        } else {
+            console.log(sign.data.tips)
         }
         console.log("————————————")
-        console.log("查询积分")
-        let info = await commonGet('/user/info')
-        let amount = info.data.remaining_fruits;
-        if (amount >= 0.3) {
-            console.log('提现')
-            let user_withdraw = await commonPost('/user.user_withdraw/apply',{"pay_gateway": "wechat", "fruit_withdraw_amount": amount.toString()})
-            console.log(user_withdraw.msg)
+        console.log("开始任务")
+        let taskList = await commonPost('/dailyTaskv2/index', {"token":token,"appid":appId,"openid":openId})
+        for (let task of taskList.data) {
+            console.log('任务：' + task.task_name)
+            if (task.status == 1) {
+                console.log('任务已完成')
+            } else {
+                let popUpRedEnvelopes = await commonPost('/inflatedv3/popUpRedEnvelopes', {"type":task.inflated_type,"token":token,"appid":appId,"openid":openId})
+                console.log(popUpRedEnvelopes.codemsg)
+                let dialogId = popUpRedEnvelopes.data.dialogId;
+                let receiveRedEnvelopes = await commonPost('/inflatedv3/receiveRedEnvelopes', {"dialogId":dialogId,"token":token,"appid":appId,"openid":openId})
+                console.log(receiveRedEnvelopes.codemsg)
+            }
         }
-        info = await commonGet('/user/info')
-        console.log(`拥有能量：${info.data.remaining_energies} 果子：${info.data.remaining_fruits}\n`)
-        notice += `用户：${id} 拥有能量：${info.data.remaining_energies} 果子：${info.data.remaining_fruits}\n`
+        console.log("————————————")
+        console.log("体现")
+        let withdraw = await commonPost('/withdrawal/withdrawal', {"withdrawalId":8,"token":token,"appid":appId,"openid":openId})
+        console.log(withdraw.codemsg)
+        let amount = withdraw.data.amount;
+        if (!amount) {
+            let inflatedAmount = await commonPost('/inflatedv3/inflatedAmount', {"token":token,"appid":appId,"openid":openId})
+            amount = inflatedAmount.data.userAmount;
+        }
+        console.log('剩余现金：' + amount)
+        notice += `用户：${id} 剩余现金: ${amount}\n`
     }
     if (notice) {
         await sendMsg(notice);
@@ -57,48 +71,44 @@ async function main() {
 }
 
 async function getCookie() {
-    const token = $request.headers["token"] || $request.headers["Token"];
-    if (!token) {
-        return
-    }
     const body = $.toObj($response.body);
-    if (!body || !body.data || !body.data.mobile) {
+    if (!body || !body.data) {
         return
     }
-    const id = body.data.mobile;
-    const newData = {"id": id, "token": token};
-    const index = DFJS.findIndex(e => e.id == newData.id);
+    const id = body.data.user.mobile;
+    const openId = body.data.user.openid;
+    const refreshToken = body.data.user.refresh_token;
+    const newData = {"id": id, "openId": openId, "refreshToken": refreshToken};
+    const index = KuGua.findIndex(e => e.id == newData.id);
     if (index !== -1) {
-        if (DFJS[index].token == newData.token) {
+        if (KuGua[index].refreshToken == newData.refreshToken) {
             return
         } else {
-            DFJS[index] = newData;
-            console.log(newData.token)
+            KuGua[index] = newData;
+            console.log(newData.refreshToken)
             $.msg($.name, `🎉用户${newData.id}更新token成功!`, ``);
         }
     } else {
-        DFJS.push(newData)
-        console.log(newData.token)
+        KuGua.push(newData)
+        console.log(newData.refreshToken)
         $.msg($.name, `🎉新增用户${newData.id}成功!`, ``);
     }
-    $.setjson(DFJS, "DFJS");
+    $.setjson(KuGua, "KuGua");
 }
 
 async function commonPost(url,body) {
     return new Promise(resolve => {
         const options = {
-            url: `https://ys.shajixueyuan.com/api${url}`,
+            url: `https://www.kugua.com/wxapp${url}`,
             headers : {
-                'version': '1.0.13.2',
                 'content-type': 'application/json',
                 'xweb_xhr': '1',
-                'token': token,
                 'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 MicroMessenger/6.8.0(0x16080000) NetType/WIFI MiniProgramEnv/Mac MacWechat/WMPF MacWechat/3.8.7(0x13080712) XWEB/1191',
-                'accept': 'application/json',
+                'accept': '*/*',
                 'Sec-Fetch-Site': 'cross-site',
                 'Sec-Fetch-Mode': 'cors',
                 'Sec-Fetch-Dest': 'empty',
-                'Referer': `https://servicewechat.com/wxebdf2c44a2a714c2/70/page-frame.html`,
+                'Referer': `https://servicewechat.com/wx1f9fc8e79fcbce16/94/page-frame.html`,
                 'Accept-Encoding': 'gzip, deflate, br',
                 'Accept-Language': 'zh-CN,zh;q=0.9',
             },
@@ -122,50 +132,13 @@ async function commonPost(url,body) {
     })
 }
 
-async function commonGet(url) {
-    return new Promise(resolve => {
-        const options = {
-            url: `https://ys.shajixueyuan.com/api${url}`,
-            headers : {
-                'version': '1.0.13.2',
-                'content-type': 'application/json',
-                'xweb_xhr': '1',
-                'token': token,
-                'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 MicroMessenger/6.8.0(0x16080000) NetType/WIFI MiniProgramEnv/Mac MacWechat/WMPF MacWechat/3.8.7(0x13080712) XWEB/1191',
-                'accept': 'application/json',
-                'Sec-Fetch-Site': 'cross-site',
-                'Sec-Fetch-Mode': 'cors',
-                'Sec-Fetch-Dest': 'empty',
-                'Referer': `https://servicewechat.com/wxebdf2c44a2a714c2/70/page-frame.html`,
-                'Accept-Encoding': 'gzip, deflate, br',
-                'Accept-Language': 'zh-CN,zh;q=0.9',
-            }
-        }
-        $.get(options, async (err, resp, data) => {
-            try {
-                if (err) {
-                    console.log(`${JSON.stringify(err)}`)
-                    console.log(`${$.name} API请求失败，请检查网路重试`)
-                } else {
-                    await $.wait(2000)
-                    resolve(JSON.parse(data));
-                }
-            } catch (e) {
-                $.logErr(e, resp)
-            } finally {
-                resolve();
-            }
-        })
-    })
-}
-
 async function sendMsg(message) {
     if ($.isNode()) {
         let notify = ''
         try {
             notify = require('./sendNotify');
         } catch (e) {
-            notify = require("../sendNotify");
+            notify = require("../../sendNotify");
         }
         await notify.sendNotify($.name, message);
     } else {
