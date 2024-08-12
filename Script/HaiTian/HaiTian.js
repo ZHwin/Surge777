@@ -90,7 +90,7 @@ async function main() {
         }
         console.log('获取hadayToken')
         let login = await cmallwapPost('/haday/wx/auth/loginByToken',{"access_token":token})
-        hadayToken = login.data;
+        hadayToken = login?.data;
         // console.log('答题')
         // let getTodayQuizQuestion = await commonGet('/quiz/getTodayQuizQuestion?id=13')
         // let answers = getTodayQuizQuestion.data.answers;
