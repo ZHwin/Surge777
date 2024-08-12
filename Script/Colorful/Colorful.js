@@ -4,7 +4,7 @@
  * export COLORFUL_RAFFLE='true' //开启抽奖
  */
 const $ = new Env('七彩虹商城')
-
+const baseUrl = 'shopapitest.skycolorful.com'
 const COLORFUL = ($.isNode() ? (process.env.COLORFUL ? JSON.parse(process.env.COLORFUL) : undefined) : $.getjson("COLORFUL")) || [],
     COLORFUL_RAFFLE = ($.isNode() ? process.env.COLORFUL_RAFFLE : $.getjson("COLORFUL_RAFFLE")) || false;
 let token = '', refreshToken = ''
@@ -230,11 +230,11 @@ async function getCookie() {
 async function commonPost(url, body = {}) {
     return new Promise(resolve => {
         const options = {
-            url: `https://shopapi.skycolorful.com/api${url}`,
+            url: `https://${baseUrl}/api${url}`,
             headers: {
-                'Host': 'shopapi.skycolorful.com',
+                'Host': baseUrl,
                 'Connection': 'keep-alive',
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x63090b13)XWEB/9185',
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781() NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat()XWEB/1',
                 'Accept': '*/*',
                 'Accept-Encoding': 'gzip, deflate, br',
                 'Content-Type': 'application/json',
@@ -243,7 +243,7 @@ async function commonPost(url, body = {}) {
                 'source': 'Wx',
                 'xweb_xhr': 1,
                 'UcSource': 30,
-                'Referer': 'https://servicewechat.com/wx49018277e65fc3e1/55/page-frame.html',
+                'Referer': 'https://servicewechat.com/wx49018277e65fc3e1/61/page-frame.html',
                 'Authorization': `Bearer ${token}`,
                 'X-Authorization': `Bearer ${refreshToken}`,
                 ...sign()
@@ -285,11 +285,11 @@ async function commonPost(url, body = {}) {
 async function commonGet(url) {
     return new Promise(resolve => {
         const options = {
-            url: `https://shopapi.skycolorful.com/api${url}`,
+            url: `https://${baseUrl}/api${url}`,
             headers: {
-                'Host': 'shopapi.skycolorful.com',
+                'Host': baseUrl,
                 'Connection': 'keep-alive',
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x63090b13)XWEB/9185',
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781() NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat()XWEB/1',
                 'Accept': '*/*',
                 'Accept-Encoding': 'gzip, deflate, br',
                 'Content-Type': 'application/json',
@@ -298,7 +298,7 @@ async function commonGet(url) {
                 'source': 'Wx',
                 'xweb_xhr': 1,
                 'UcSource': 30,
-                'Referer': 'https://servicewechat.com/wx49018277e65fc3e1/55/page-frame.html',
+                'Referer': 'https://servicewechat.com/wx49018277e65fc3e1/61/page-frame.html',
                 'Authorization': `Bearer ${token}`,
                 'X-Authorization': `Bearer ${refreshToken}`,
                 ...sign()
