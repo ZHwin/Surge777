@@ -29,6 +29,7 @@ async function main() {
         let getCardNumber = await jinlingPost('/app/member/v1/getMemberBasic',{"telephone":id,"getType":""})
         if (!getCardNumber.success) {
             console.log(getCardNumber.message)
+            await sendMsg(`用户：${id}\n需要重新进入小程序`);
             continue
         }
         cardNumber = getCardNumber.data.cardInfo.cardNumber;
