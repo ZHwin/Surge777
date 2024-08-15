@@ -64,6 +64,7 @@
 | 中兴手机商城 | [ZTE](https://github.com/xzxxn777/Surge/blob/main/Script/ZTE/ZTE.js) | ✅(2024/08/12) | ✅️ |
 | 中兴社区 | [ZTE_Community](https://github.com/xzxxn777/Surge/blob/main/Script/ZTE/ZTE_Community.js) | ✅(2024/08/12) | ✅️ |
 | 尊享金陵 | [ZXJL](https://github.com/xzxxn777/Surge/blob/main/Script/ZXJL/ZXJL.js) | ✅(2024/08/12) | ✅️ |
+| 竟舟 | [JingZhou](https://github.com/xzxxn777/Surge/blob/main/Script/JingZhou/JingZhou.js) | ✅(2024/08/15) | ✅️ |
 
 
 ------
